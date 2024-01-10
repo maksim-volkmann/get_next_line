@@ -38,3 +38,34 @@ int main(void) {
 
 	return 0;
 }
+
+
+int main() {
+    // Write to the file
+    int fd = open("texttest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1) {
+        // handle error
+        return 1;
+    }
+    char *str = ""; //write in this line
+    ssize_t len = strlen(str);
+    if (write(fd, str, len) != len) {
+        // handle error
+        return 1;
+    }
+    close(fd);
+    // Read from the file
+    fd = open("texttest.txt", O_RDONLY);
+    if (fd == -1) {
+        // handle error
+        return 1;
+    }
+    static int  count = 0;
+    for (int i = 0; i < 14; i++)
+    {
+        printf("%d :%s\n", count, get_next_line(fd));
+        count++;
+    }
+    close(fd);
+    return 0;
+}
