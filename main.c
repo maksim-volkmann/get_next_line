@@ -15,57 +15,64 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define BUFFER_SIZE 5
 
-int main(void) {
-	int fd;
-	ssize_t read_bytes;
-	char buffer[BUFFER_SIZE];
+// int main(void) {
+// 	int fd;
+// 	ssize_t read_bytes;
+// 	char buffer[BUFFER_SIZE];
 
-	// Open the file
-	fd = open("test.txt", O_RDONLY);
-	// if (fd == -1)
-	// 	return (1);
+// 	// Open the file
+// 	fd = open("test.txt", O_RDONLY);
+// 	// if (fd == -1)
+// 	// 	return (1);
 
-	// Read from the file and write to the terminal
-	while ((read_bytes = read(fd, buffer, BUFFER_SIZE)) > 0) {
-		write(STDOUT_FILENO, buffer, read_bytes);
+// 	// Read from the file and write to the terminal
+// 	while ((read_bytes = read(fd, buffer, BUFFER_SIZE)) > 0) {
+// 		write(STDOUT_FILENO, buffer, read_bytes);
+// 	}
+
+// 	// Close the file
+// 	close(fd);
+
+// 	return 0;
+// }
+
+// ssize_t read(int fd, void *buf, size_t count);
+
+
+
+int main() {
+	// Write to the file
+	int fd = open("texttest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1) {
+		// handle error
+		return 1;
 	}
-
-	// Close the file
+	char *str = "aaa"; //write in this line
+	ssize_t len = strlen(str);
+	if (write(fd, str, len) != len) {
+		// handle error
+		return 1;
+	}
 	close(fd);
-
+	// Read from the file
+	fd = open("texttest.txt", O_RDONLY);
+	if (fd == -1) {
+		// handle error
+		return 1;
+	}
+	static int  count = 0;
+	for (int i = 0; i < 14; i++)
+	{
+		// printf("%d :%s\n", count, get_next_line(fd));
+		count++;
+	}
+	close(fd);
 	return 0;
 }
 
 
-int main() {
-    // Write to the file
-    int fd = open("texttest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1) {
-        // handle error
-        return 1;
-    }
-    char *str = ""; //write in this line
-    ssize_t len = strlen(str);
-    if (write(fd, str, len) != len) {
-        // handle error
-        return 1;
-    }
-    close(fd);
-    // Read from the file
-    fd = open("texttest.txt", O_RDONLY);
-    if (fd == -1) {
-        // handle error
-        return 1;
-    }
-    static int  count = 0;
-    for (int i = 0; i < 14; i++)
-    {
-        printf("%d :%s\n", count, get_next_line(fd));
-        count++;
-    }
-    close(fd);
-    return 0;
-}
+https://velog.io/@ljiwoo59/getnextline
