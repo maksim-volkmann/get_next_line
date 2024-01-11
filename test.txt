@@ -1,4 +1,0 @@
-This is first line
-and the second line
-this would be a third line
-number 4

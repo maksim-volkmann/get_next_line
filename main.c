@@ -46,12 +46,12 @@
 
 int main() {
 	// Write to the file
-	int fd = open("texttest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	int fd = open("test1.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1) {
 		// handle error
 		return 1;
 	}
-	char *str = "aaa"; //write in this line
+	char *str = "aaa\nbb\nc"; //write in this line
 	ssize_t len = strlen(str);
 	if (write(fd, str, len) != len) {
 		// handle error
@@ -59,7 +59,7 @@ int main() {
 	}
 	close(fd);
 	// Read from the file
-	fd = open("texttest.txt", O_RDONLY);
+	fd = open("test1.txt", O_RDONLY);
 	if (fd == -1) {
 		// handle error
 		return 1;
@@ -73,6 +73,3 @@ int main() {
 	close(fd);
 	return 0;
 }
-
-
-https://velog.io/@ljiwoo59/getnextline
