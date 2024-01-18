@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 16:03:36 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/01/18 07:25:39 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/01/08 18:07:44 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/01/18 07:31:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*init_storage(char *storage)
 {
@@ -88,55 +88,21 @@ char	*read_to_storage(int fd, char *storage)
 
 char	*get_next_line(int fd)
 {
-	static char	*storage = NULL;
+	static char	*storage[FD_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(storage);
-		storage = NULL;
+		free(storage[fd]);
+		storage[fd] = NULL;
 		return (NULL);
 	}
-	storage = init_storage(storage);
-	if (!storage)
+	storage[fd] = init_storage(storage[fd]);
+	if (!storage[fd])
 		return (NULL);
-	storage = read_to_storage(fd, storage);
-	if (!storage)
+	storage[fd] = read_to_storage(fd, storage[fd]);
+	if (!storage[fd])
 		return (NULL);
-	line = extract_line(&storage);
+	line = extract_line(&storage[fd]);
 	return (line);
 }
-
-// #include <fcntl.h>
-// #include <string.h>
-// #include <stdio.h>
-
-// int main() {
-// 	// Write to the file
-// 	int fd = open("test1.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1) {
-// 		// handle error
-// 		return 1;
-// 	}
-// 	char *str = "aaa\nbb\ncccccccccc\n789789789";
-// 	ssize_t len = strlen(str);
-// 	if (write(fd, str, len) != len) {
-// 		// handle error
-// 		return 1;
-// 	}
-// 	close(fd);
-// 	// Read from the file
-// 	fd = open("test1.txt", O_RDONLY);
-// 	if (fd == -1) {
-// 		// handle error
-// 		return 1;
-// 	}
-// 	static int  count = 0;
-// 	for (int i = 0; i < 5; i++)
-// 	{
-// 		printf("%d :%s\n", count, get_next_line(fd));
-// 		count++;
-// 	}
-// 	close(fd);
-// 	return 0;
-// }
